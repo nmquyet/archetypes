@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>${artifactId}</name>
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- VNG Commons -->
+        <vng-common-scribe.version>0.0.3</vng-common-scribe.version>
+        <vng-common-utils.version>1.0.0</vng-common-utils.version>
+        <vng-common-event.version>1.0.0</vng-common-event.version>
+        <vng-common-service.version>1.0.1</vng-common-service.version>
+        
+        <gplus-point-client.version>2.0.0</gplus-point-client.version>
+
+        <!-- Spring Core -->
+        <spring.version>4.1.4.RELEASE</spring.version>
+        
+        <spring-shell.version>1.1.0.RELEASE</spring-shell.version>
+        
+        <httpclient.version>4.3.3</httpclient.version>
+
+        <!-- Spring data redis -->
+        <spring-data.version>1.6.3.RELEASE</spring-data.version>
+        <spring-data-redis.version>1.4.2.RELEASE</spring-data-redis.version>
+        <jedis.version>2.6.2</jedis.version>
+<!--         <jedis.version>2.1.0</jedis.version> -->
+        <commons-pool.version>1.6</commons-pool.version>
+
+        <!-- RabbitMQ -->
+        <amqp-client.version>3.4.2</amqp-client.version>
+
+        <!-- Spring web service -->
+        <spring-ws.version>2.1.4.RELEASE</spring-ws.version>
+
+        <!-- Apache Thrift -->
+        <thrift.version>0.9.1</thrift.version>
+
+        <!-- Jackson JSON Mapper -->
+        <jackson.version>1.9.13</jackson.version>
+
+        <!-- Jackson Mapper Version 2 -->
+        <jackson2.version>2.5.0</jackson2.version>
+        <jaxb-api.version>2.2.12</jaxb-api.version>
+
+        <!-- Validation -->
+        <validation-api.version>1.1.0.Final</validation-api.version>
+
+        <!-- Common Codecs -->
+        <commons-codec.version>1.6</commons-codec.version>
+
+        <!-- AspectJ -->
+        <aspectj.version>1.7.4</aspectj.version>
+
+        <!-- Hibernate -->
+        <hibernate.version>4.3.8.Final</hibernate.version>
+        <hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
+        <commons-collection.version>3.2.1</commons-collection.version>
+        <hibernate-redis.version>1.6.1</hibernate-redis.version>
+
+        <!-- Database Driver -->
+        <mysql-connector.version>5.1.29</mysql-connector.version>
+
+        <!-- Connection pool -->
+        <commons-dbcp.version>1.4</commons-dbcp.version>
+        <commons-dbcp2.version>2.1</commons-dbcp2.version>
+    </properties>
+
+    <dependencies>
+        <!-- Spring JDBC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- MySQL Driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector.version}</version>
+        </dependency>
+
+        <!-- Connection pool -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>${commons-dbcp2.version}</version>
+        </dependency>
+
+        <!-- Spring Framework -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+             <groupId>org.springframework.shell</groupId>
+             <artifactId>spring-shell</artifactId>
+             <version>${spring-shell.version}</version>
+        </dependency> 
+        
+                <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- slf4j logger abstraction -->
+        <!-- Client code must include and configure an correct sf4j binder 
+            to enable logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>vn.com.vng</groupId>
+            <artifactId>vng-common-scribe4j</artifactId>
+            <version>${vng-common-scribe.version}</version>
+        </dependency>
+
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>vn.myplus.cli.App</Main-Class>
+                                        <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+                                        <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

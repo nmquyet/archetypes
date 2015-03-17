@@ -1,0 +1,65 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <context:component-scan base-package="${package}.cli"/>
+  
+    <bean id="configProperties" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="localOverride" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:config/${symbol_dollar}{env}/application.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- Json Mapping -->
+    <!--
+    <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper"></bean>
+    -->
+
+    <!-- Rest template -->
+    <!--
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+    -->
+
+    <!--
+    <bean id="gplus" class="${package}.point.client.GplusClient">
+        <constructor-arg name="host" value="${symbol_dollar}{service.gplus.url}"></constructor-arg>
+        <constructor-arg name="apiKey" value="${symbol_dollar}{service.gplus.apiKey}"></constructor-arg>
+        <constructor-arg name="secret" value="${symbol_dollar}{service.gplus.secret}"></constructor-arg>
+        <constructor-arg name="objectMapper" ref="objectMapper"></constructor-arg>
+        <constructor-arg name="restTemplate" ref="restTemplate"></constructor-arg>
+    </bean>
+    -->
+
+    <!-- Database -->
+    <!--
+    <bean id="gplus_slave_db_poolable_conn_factory" class="org.apache.commons.dbcp2.PoolableConnectionFactory">
+        <constructor-arg name="connFactory">
+            <bean class="org.apache.commons.dbcp2.DriverManagerConnectionFactory">
+                <constructor-arg name="connectUri" value="${symbol_dollar}{db.slave.gplus.url}"></constructor-arg>
+                <constructor-arg name="uname" value="${symbol_dollar}{db.slave.gplus.username}"></constructor-arg>
+                <constructor-arg name="passwd" value="${symbol_dollar}{db.slave.gplus.password}"></constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="dataSourceJmxName" value="${symbol_pound}{null}"></constructor-arg>
+    </bean>
+    <bean id="gplus_slave_db_conn_pool" class="org.apache.commons.pool2.impl.GenericObjectPool">
+        <constructor-arg name="factory" ref="gplus_slave_db_poolable_conn_factory"></constructor-arg>
+    </bean>
+    <bean id="gplus_slave_db_datasource" class="org.apache.commons.dbcp2.PoolingDataSource">
+        <constructor-arg name="pool" ref="gplus_slave_db_conn_pool"></constructor-arg>
+    </bean>
+    <bean id="gplus_slave_db_jdbc_template" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg name="dataSource" ref="gplus_slave_db_datasource"></constructor-arg>
+    </bean>
+    -->
+
+</beans>

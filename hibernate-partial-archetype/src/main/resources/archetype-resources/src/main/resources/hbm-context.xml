@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="configProperties" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="localOverride" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:config/${env}/hibernate.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="pooledSqlServerDS" class="com.mchange.v2.c3p0.DataSources" factory-method="pooledDataSource">
+        <constructor-arg index="0">
+            <bean id="noPoolDataSource" class="com.mchange.v2.c3p0.DataSources" factory-method="unpooledDataSource">
+                <constructor-arg name="jdbcUrl" value="${hibernate.connection.url}"/>
+                <constructor-arg name="user" value="${hibernate.connection.username}"/>
+                <constructor-arg name="password" value="${hibernate.connection.password}"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="pooledSqlServerDS"></property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.connection.driver_class">${hibernate.connection.driver_class}</prop>
+                <prop key="hibernate.connection.url">${hibernate.connection.url}</prop>
+                <prop key="hibernate.connection.username">${hibernate.connection.username}</prop>
+                <prop key="hibernate.connection.password">${hibernate.connection.password}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.c3p0.min_size">${hibernate.c3p0.min_size}</prop>
+                <prop key="hibernate.c3p0.max_size">${hibernate.c3p0.max_size}</prop>
+                <prop key="hibernate.c3p0.timeout">${hibernate.c3p0.timeout}</prop>
+                <prop key="hibernate.c3p0.max_statements">${hibernate.c3p0.max_statements}</prop>
+                <prop key="hibernate.c3p0.idle_test_period">${hibernate.c3p0.idle_test_period}</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <constructor-arg ref="sessionFactory"></constructor-arg>
+    </bean>
+</beans>
